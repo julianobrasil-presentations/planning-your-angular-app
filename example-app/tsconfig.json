@@ -17,7 +17,12 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@app/model": ["src/app/data-access/model"],
+      "@app/rest": ["src/app/data-access/rest"],
+      "@app/store": ["src/app/data-access/store"]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
