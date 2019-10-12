@@ -10,7 +10,7 @@ export class AppComponent {
   title = 'example-app';
 
   constructor(private _http: HttpClient) {
-    this._http.get<any>('http://my-json-server.typicode.com/julianobrasil-presentations/planning-your-angular-app/users')
+    this._http.get<any>('https://my-json-server.typicode.com/julianobrasil-presentations/planning-your-angular-app/users')
         .subscribe(console.log);
   }
 }
