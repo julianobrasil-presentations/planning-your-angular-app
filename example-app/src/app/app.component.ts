@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {UserRestService} from '@app/rest';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +9,8 @@ import {HttpClient} from '@angular/common/http';
 export class AppComponent {
   title = 'example-app';
 
-  constructor(private _http: HttpClient) {
-    this._http.get<any>('https://my-json-server.typicode.com/julianobrasil-presentations/planning-your-angular-app/users')
+  constructor(private _userRest: UserRestService) {
+    this._userRest.getPagedUsers()
         .subscribe(console.log);
   }
 }

@@ -1,10 +1,16 @@
 {
   "users": [
     {
-    "id": 1,
-    "name": "Juliano",
-    "last-name": "Custódio",
-    "photo": ""
+    	"id": 1,
+    	"name": "Juliano",
+    	"lastName": "Custódio",
+    	"photo": ""
+    },
+    {
+    	"id": 2,
+    	"name": "Paula",
+    	"lastName": "Naves",
+    	"photo": ""
     }
   ]
 }
