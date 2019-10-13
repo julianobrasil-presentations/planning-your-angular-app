@@ -24,26 +24,33 @@ export class UserRestService {
     return hasParams ? this._http.get<User[]>(url) : this._http.get<User[]>(url, {params});
   }
 
+  getUser(id: number): Observable<User> {
+    const url = `${this._url.allUsers}/${id}`;
+
+    return this._http.get<User>(url);
+  }
+
   getPagedUsers(partOfName?: string, page = 0, size = 10): Observable<Page<User>> {
     const url = this._url.allUsers;
 
-    let params: HttpParams = new HttpParams().set(this._url.PAGE, '' + page)
+    let params: HttpParams = new HttpParams().set(this._url.PAGE, '' + (page + 1))
       .set(this._url.SIZE, '' + size);
     if (partOfName) {
       params = params.set('name', partOfName);
     }
 
-    return this._http.get<User[]>(url, {params, observe: 'response'}).pipe(
-      map((response: HttpResponse<User[]>) => {
-        const data: Page<User> = {
-          content: response.body
-        };
+    return this._http.get<Page<User>>(url, {params});
+  }
 
-        if (response.headers && response.headers.get('link')) {
+  modifyUser(user: User): Observable<User> {
+    const url = this._url.allUsers + '/' + user.id;
 
-        }
+    return this._http.put<User>(url, user);
+  }
 
-        return data;
-      }));
+  removeUser(user: User): Observable<User> {
+    const url = this._url.allUsers + '/' + user;
+
+    return this._http.delete<User>(url);
   }
 }
