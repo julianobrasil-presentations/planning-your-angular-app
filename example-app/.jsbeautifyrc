@@ -1,0 +1,12 @@
+{
+    "wrap_line_length": 120,
+    "brace_style": "collapse,preserve-inline",
+    "html": {
+        "indent_size": 2,
+        "wrap_attributes": "force-aligned",
+        "wrap_line_length": 120
+    },
+    "css": {
+        "indent_size": 2
+    }
+}

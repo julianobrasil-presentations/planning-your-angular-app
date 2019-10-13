@@ -1,0 +1,13 @@
+<a *ngIf="user"
+   [routerLink]="['users', user?.id]">
+  <div class="container">
+    <section (click)="userSelected?.emit(user)"
+             class="photo">
+      <img [src]="user?.photo">
+    </section>
+    <section *ngIf="showName"
+             class="name">
+      {{user?.name}}
+    </section>
+  </div>
+</a>

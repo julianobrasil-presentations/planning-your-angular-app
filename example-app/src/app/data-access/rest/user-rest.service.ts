@@ -25,6 +25,12 @@ export class UserRestService {
     return of(user).pipe(delay(randomDelay()));
   }
 
+  getUserByUsername(email: string): Observable<User> {
+    const user: User = this._loadUsersFromLocalStorage().find((u: User) => u.email === email);
+
+    return of(user).pipe(delay(randomDelay()));
+  }
+
   getPagedUsers(partOfName = '', page = 0, size = 10): Observable<Page<User>> {
     let users: User[] = this._loadUsersFromLocalStorage();
 

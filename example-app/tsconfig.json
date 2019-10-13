@@ -21,7 +21,11 @@
     "paths": {
       "@app/model": ["src/app/data-access/model"],
       "@app/rest": ["src/app/data-access/rest"],
-      "@app/store": ["src/app/data-access/store"]
+      "@app/store": ["src/app/data-access/store"],
+      "@app/views/login": ["src/app/views/login"],
+      "@app/views/shell": ["src/app/views/shell"],
+      "@app/views/user-details": ["src/app/views/user-details"],
+      "@app/views/shared/components/*": ["src/app/views/shared/components/*"]
     },
     "resolveJsonModule": true
   },

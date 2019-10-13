@@ -1,0 +1,12 @@
+<div class="container">
+  <section (click)="_switchToRandomPhoto()"
+           class="photo">
+    <img [src]="data?.user?.photo">
+  </section>
+
+  <section class="user-data">
+    <app-user-data-form (userChange)="_saveUser($event)"
+                        [user]="data?.user">
+    </app-user-data-form>
+  </section>
+</div>

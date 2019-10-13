@@ -1,0 +1,25 @@
+<form (ngSubmit)="saveButton()"
+      [formGroup]="_form"
+      novalidate>
+  <div class="container mat-elevation-z1">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             formControlName="name"
+             placeholder="ENTER NAME AND SURNAME..."
+             required
+             type="text">
+      <mat-error *ngIf="_form.get('name').hasError('required')">
+        Name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <section class="button">
+      <button (click)="saveButton()"
+              [disabled]="_disableSaveButton"
+              mat-raised-button
+              type="button">
+        Save
+      </button>
+    </section>
+  </div>
