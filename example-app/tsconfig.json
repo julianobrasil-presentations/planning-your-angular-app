@@ -22,7 +22,8 @@
       "@app/model": ["src/app/data-access/model"],
       "@app/rest": ["src/app/data-access/rest"],
       "@app/store": ["src/app/data-access/store"]
-    }
+    },
+    "resolveJsonModule": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

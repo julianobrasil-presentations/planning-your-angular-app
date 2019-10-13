@@ -1,56 +1,87 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {delay} from 'rxjs/operators';
 
-import {UrlApi} from './url-api.service';
 import {User} from '@app/model';
 import {Page} from './rest-model';
 
 @Injectable({providedIn: 'root'})
 export class UserRestService {
-  constructor(private _url: UrlApi, private _http: HttpClient) {}
 
-  getAllUsers(partOfName: string): Observable<User[]> {
-    const url = this._url.allUsers;
-    let hasParams = false;
-    let params: HttpParams;
+  getAllUsers(partOfName?: string): Observable<User[]> {
+    let users: User[] = this._loadUsersFromLocalStorage();
     if (partOfName) {
-      hasParams = true;
-      params = new HttpParams().set('name', partOfName);
+      users = users.filter((u: User) => u.name.toUpperCase()
+        .includes(partOfName.toLocaleUpperCase()));
     }
 
-    return hasParams ? this._http.get<User[]>(url) : this._http.get<User[]>(url, {params});
+    return of(users).pipe(delay(randomDelay()));
   }
 
   getUser(id: number): Observable<User> {
-    const url = `${this._url.allUsers}/${id}`;
+    const user: User = this._loadUsersFromLocalStorage().find((u: User) => u.id === id);
 
-    return this._http.get<User>(url);
+    return of(user).pipe(delay(randomDelay()));
   }
 
-  getPagedUsers(partOfName?: string, page = 0, size = 10): Observable<Page<User>> {
-    const url = this._url.allUsers;
+  getPagedUsers(partOfName = '', page = 0, size = 10): Observable<Page<User>> {
+    let users: User[] = this._loadUsersFromLocalStorage();
 
-    let params: HttpParams = new HttpParams().set(this._url.PAGE, '' + (page + 1))
-      .set(this._url.SIZE, '' + size);
-    if (partOfName) {
-      params = params.set('name', partOfName);
-    }
+    users = users.filter((u: User) => u.name.toUpperCase().includes(partOfName ? partOfName.toUpperCase() : ''));
 
-    return this._http.get<Page<User>>(url, {params});
+    const totalElements = users.length;
+
+    users = users.slice(page * size, page * size + size);
+
+    const rPage: Page<User> = {
+      content: users,
+      totalElements,
+    };
+
+    return of(rPage).pipe(delay(randomDelay()));
   }
 
   modifyUser(user: User): Observable<User> {
-    const url = this._url.allUsers + '/' + user.id;
+    const users: User[] = this._loadUsersFromLocalStorage();
 
-    return this._http.put<User>(url, user);
+    const index = users.findIndex((u: User) => u.id === user.id);
+
+    if (index > -1) {
+      users.splice(index, 1, user);
+    }
+
+    this._saveUsersToLocalStorage(users);
+
+    return of(user).pipe(delay(randomDelay()));
   }
 
   removeUser(user: User): Observable<User> {
-    const url = this._url.allUsers + '/' + user;
+    const users: User[] = this._loadUsersFromLocalStorage();
 
-    return this._http.delete<User>(url);
+    const index = users.findIndex((u: User) => u.id === user.id);
+
+    if (index > -1) {
+      users.splice(index, 1);
+    }
+
+    this._saveUsersToLocalStorage(users);
+
+    return of(user).pipe(delay(randomDelay()));
   }
+
+  private _loadUsersFromLocalStorage(): User[] {
+    return JSON.parse(localStorage.getItem('db')).users as User[];
+  }
+
+  private _saveUsersToLocalStorage(users: User[]): void {
+    const data = JSON.parse(localStorage.getItem('db'));
+    data.users = users;
+    localStorage.removeItem('db');
+    localStorage.setItem('db', JSON.stringify(data));
+  }
+}
+
+function randomDelay(): number {
+  return Math.random() * 1000;
 }

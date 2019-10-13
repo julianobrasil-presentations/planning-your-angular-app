@@ -8,8 +8,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {MatButtonModule} from '@angular/material/button';
 
-import {PaginationInterceptor} from '@app/rest';
-
 @NgModule({
   declarations: [
     AppComponent
@@ -22,7 +20,7 @@ import {PaginationInterceptor} from '@app/rest';
 
     MatButtonModule,
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useExisting: PaginationInterceptor, multi: true}],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

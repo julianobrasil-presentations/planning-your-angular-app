@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {UserRestService} from '@app/rest';
-import {pipe} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {User} from '@app/model';
+
+import * as data from '../assets/db/db.json';
 
 @Component({
   selector: 'app-root',
@@ -12,15 +13,12 @@ import {User} from '@app/model';
 export class AppComponent {
   title = 'example-app';
 
-  constructor(private _userRest: UserRestService) {
-    this._userRest.getPagedUsers(null, 0, 1)
-      .subscribe(console.log);
+  constructor() {
+    this._loadFromFileToDB();
+  }
 
-    this._userRest.getUser(1)
-      .pipe(switchMap((u: User) => {
-        u.lastName = 'aeiou';
-        return this._userRest.modifyUser(u);
-      }))
-      .subscribe();
+  private _loadFromFileToDB() {
+    // tslint:disable-next-line: no-string-literal
+    localStorage.setItem('db', JSON.stringify(data['default']));
   }
 }
