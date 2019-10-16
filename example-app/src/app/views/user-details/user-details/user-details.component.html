@@ -1,0 +1,5 @@
+<div *ngIf="_user$ | async as user">
+  <app-user-presentation (dataChange)="_userChanged($event?.user)"
+                         [data]="user">
+  </app-user-presentation>
+</div>
