@@ -18,13 +18,22 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserPresentationComponent {
-  @Input()
-  data: UserPresentationComponentData;
+  @Input() get data(): UserPresentationComponentData {
+    return this._data;
+  }
+  set data(value: UserPresentationComponentData) {
+    this._data = value;
+
+    this._showSpinner = false;
+  }
+  private _data: UserPresentationComponentData;
 
   @Output()
   dataChange: EventEmitter<UserPresentationComponentData> = new EventEmitter<
     UserPresentationComponentData
   >();
+
+  _showSpinner = false;
 
   constructor(private _componentService: UserPresentationComponentService) {}
 
@@ -40,6 +49,8 @@ export class UserPresentationComponent {
       };
 
       this.dataChange.emit({user});
+
+      this._showSpinner = true;
     });
   }
 }

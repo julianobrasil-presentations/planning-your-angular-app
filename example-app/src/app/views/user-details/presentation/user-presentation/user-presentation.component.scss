@@ -5,10 +5,23 @@
 
 .photo {
   flex: 1;
+  position: relative;
 
   img {
     width: 100%;
     cursor: pointer;
+  }
+
+  mat-spinner {
+    position: absolute;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+  }
+
+  &.disabled {
+    background-size: cover;
+    opacity: 0.2;
+    overflow: hidden;
   }
 }
 

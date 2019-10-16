@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 
 import {UsersVerticalListComponentService} from './users-vertical-list-component.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {User} from '@app/model';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-vertical-list',
@@ -10,13 +11,26 @@ import {User} from '@app/model';
   styleUrls: ['./users-vertical-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsersVerticalListComponent {
+export class UsersVerticalListComponent implements OnDestroy {
   users$: Observable<{
     [key: number]: User;
-  }> = this._componentService.findAllUsers$();
+  }>;
+
+  /** Teardown observables subscriptions */
+  private _destroy$: Subject<void> = new Subject<void>();
 
   constructor(private _componentService: UsersVerticalListComponentService) {
     this._componentService.grabUsersFromTheServer();
+    this.users$ = this._componentService
+      .findAllUsers$()
+      .pipe(takeUntil(this._destroy$));
+  }
+
+  ngOnDestroy() {
+    if (this._destroy$ && !this._destroy$.closed) {
+      this._destroy$.next();
+      this._destroy$.complete();
+    }
   }
 
   userSelectionHandler(user: User) {

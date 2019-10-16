@@ -12,6 +12,7 @@
       <mat-error *ngIf="_form.get('name').hasError('required')">
         Name is <strong>required</strong>
       </mat-error>
+      <mat-hint *ngIf="_form.disabled">Alterando...</mat-hint>
     </mat-form-field>
 
     <section class="button">

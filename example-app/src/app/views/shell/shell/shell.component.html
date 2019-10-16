@@ -6,7 +6,9 @@
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="(isHandset$ | async) === false">
 
-    <mat-toolbar>Contatos</mat-toolbar>
+    <mat-toolbar>CONTATOS</mat-toolbar>
+
+    <mat-divider></mat-divider>
 
     <app-users-vertical-list></app-users-vertical-list>
 
@@ -24,7 +26,12 @@
       <section class="toolbar-right-side">
         <ng-container *ngIf="_user$ | async as user">
           <span>Olá, {{user?.name}}</span>
-          <app-user-avatar [user]="user"></app-user-avatar>
+          <app-user-avatar [user]="user">
+          </app-user-avatar>
+          <button (click)="_logoff()"
+                  mat-button>
+            SAIR
+          </button>
         </ng-container>
       </section>
     </mat-toolbar>

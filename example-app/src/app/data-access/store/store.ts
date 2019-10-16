@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import * as fastDeepEqual from 'fast-deep-equal';
 import produce from 'immer';
-import {map, distinctUntilChanged, scan} from 'rxjs/operators';
+import {map, distinctUntilChanged, scan, startWith} from 'rxjs/operators';
 import {ReplaySubject, pipe, BehaviorSubject} from 'rxjs';
 import {Action} from './action';
 import {StoreShape, init} from './store-model';
@@ -40,10 +40,7 @@ const reducer = () =>
       }
 
       case 'LOGOUT': {
-        const newState = produce(state, (draft: any) => {
-          draft.loginState = null;
-          draft.loginState.isLoggedIn = false;
-        });
+        const newState = produce(init, (draft: any) => draft);
 
         return newState;
       }
@@ -83,23 +80,24 @@ const reducer = () =>
       }
     }
     return state;
-  }, init);
+  }, produce(init, (draft: any) => draft));
 
 @Injectable({providedIn: 'root'})
 export class StoreService {
   private state: ReplaySubject<any> = new ReplaySubject<any>(1);
 
-  private actions: BehaviorSubject<Action> = new BehaviorSubject<Action>({
-    type: ''
-  });
+  private actions: ReplaySubject<Action> = new ReplaySubject<Action>(1);
 
   constructor() {
-    this.actions.pipe(reducer()).subscribe(this.state);
+    this.actions
+      .pipe(
+        startWith({type: ''}),
+        reducer()
+      )
+      .subscribe(this.state);
   }
 
   dispatch = (action: Action) => this.actions.next(action);
 
   select = (path: string) => this.state.pipe(slice(path));
-
-  selectUserById = (id: number) => this.select('');
 }

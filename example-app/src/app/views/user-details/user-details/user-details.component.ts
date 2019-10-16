@@ -1,11 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 
 import {UserDetailsComponentService} from './user-details-component.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {map, switchMap, tap} from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs';
+import {map, switchMap, tap, takeUntil} from 'rxjs/operators';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {User} from '@app/model';
 
 import {} from 'rxjs/operators';
@@ -17,11 +15,13 @@ import {UserPresentationComponentData} from '../presentation/user-presentation/u
   styleUrls: ['./user-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserDetailsComponent {
+export class UserDetailsComponent implements OnDestroy {
   _user$: BehaviorSubject<UserPresentationComponentData> = new BehaviorSubject<
     UserPresentationComponentData
   >(null);
 
+  /** Teardown observables subscriptions */
+  private _destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private _componentService: UserDetailsComponentService,
@@ -38,9 +38,19 @@ export class UserDetailsComponent {
 
         this._componentService
           .getUserByIdForever$('' + userAvatarComponentData.user.id)
-          .pipe(map((user: User) => ({user})))
+          .pipe(
+            map((user: User) => ({user})),
+            takeUntil(this._destroy$)
+          )
           .subscribe(this._user$);
       });
+  }
+
+  ngOnDestroy() {
+    if (this._destroy$ && !this._destroy$.closed) {
+      this._destroy$.next();
+      this._destroy$.complete();
+    }
   }
 
   _userChanged(user: User) {
