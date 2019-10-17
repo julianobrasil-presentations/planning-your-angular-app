@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {StoreService} from '@app/store';
+import {StoreService, Action} from '@app/store';
 import {withLatestFrom, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {User} from '@app/model';
@@ -17,5 +17,9 @@ export class ShellComponentService {
           : null
       )
     );
+  }
+
+  logoff() {
+    this._store.dispatch(new Action('LOGOUT'));
   }
 }

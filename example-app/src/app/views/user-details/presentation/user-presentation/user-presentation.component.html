@@ -1,6 +1,8 @@
 <div class="container">
   <section (click)="_switchToRandomPhoto()"
+           [class.disabled]="_showSpinner"
            class="photo">
+    <mat-spinner *ngIf="_showSpinner"></mat-spinner>
     <img [src]="data?.user?.photo">
   </section>
 

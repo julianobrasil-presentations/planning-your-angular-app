@@ -20,3 +20,7 @@ com o script:
   }
 ]
 ```
+
+Mas existem outros serviços que podem gerar esses dados aleatórios.
+
+Os slides você encontra em: https://slides.com/julianopavel/escalando-aplicacao-angular

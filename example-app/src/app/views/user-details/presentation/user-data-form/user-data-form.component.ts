@@ -26,6 +26,7 @@ import {
   UserDataFormComponentService
 } from './user-data-form-component.service';
 import {User} from '@app/model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-data-form',
@@ -59,6 +60,15 @@ export class UserDataFormComponent implements ControlValueAccessor, Validator {
         setTimeout(() => this._formGroupDirective.resetForm(), 700);
       }
     }
+
+    if (this._form.disabled) {
+      this._snackBar.open('Alteração realizada', 'FECHAR', {
+        duration: 3000,
+        verticalPosition: 'top',
+      });
+    }
+
+    this._form.enable();
   }
   private _user: User;
 
@@ -82,7 +92,8 @@ export class UserDataFormComponent implements ControlValueAccessor, Validator {
 
   constructor(
     private _componentService: UserDataFormComponentService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {
     this._form = this._fb.group({
       name: [null, Validators.required]
@@ -124,6 +135,7 @@ export class UserDataFormComponent implements ControlValueAccessor, Validator {
       return;
     }
     this.userChange.emit({...this.user, name: this._form.value.name});
+    this._form.disable();
   }
 
   get _disableSaveButton(): boolean {
