@@ -23,7 +23,7 @@
     "@angular/router": "~8.2.9",
     "fast-deep-equal": "^2.0.1",
     "hammerjs": "^2.0.8",
-    "immer": "^4.0.1",
+    "immer": "^8.0.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
